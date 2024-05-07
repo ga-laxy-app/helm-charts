@@ -1,0 +1,30 @@
+{{- if (include "kanidm.shouldCreateCert" .Values.certs.ca) }}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: "{{ .Release.Name }}-create-ca"
+  labels:
+    {{- include "kanidm.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": pre-install,pre-upgrade
+    "helm.sh/hook-delete-policy": before-hook-creation
+    "helm.sh/hook-weight": "0"
+spec:
+  template:
+    spec:
+      containers:
+      - name: create-ca
+        image: alpine:3.14
+        command: ["/bin/sh", "-c"]
+        args:
+        - |
+          {{- tpl (.Files.Get "scripts/create-ca.sh") . | nindent 10 }}
+        resources:
+          limits:
+            cpu: 200m
+            memory: 256Mi
+          requests:
+            cpu: 100m
+            memory: 128Mi
+      restartPolicy: Never
+{{- end }}

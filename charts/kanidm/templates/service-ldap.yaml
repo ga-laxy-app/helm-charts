@@ -1,0 +1,17 @@
+{{- if .Values.kanidm.ldap.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "kanidm.fullname" . }}-ldap
+  labels:
+    {{- include "kanidm.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.kanidm.ldap.service.type }}
+  ports:
+    - port: {{ .Values.kanidm.ldap.service.port }}
+      targetPort: ldap
+      protocol: TCP
+      name: ldap
+  selector:
+    {{- include "kanidm.selectorLabels" . | nindent 4 }}
+{{- end }}

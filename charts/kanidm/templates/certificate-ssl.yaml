@@ -1,0 +1,49 @@
+{{- if .Values.certs.ca.issuerRef }}
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: {{ include "kanidm.fullname" . }}-ssl
+  labels:
+    {{- include "kanidm.labels" . | nindent 4 }}
+spec:
+  # Secret names are always required.
+  secretName: {{ include "kanidm.ssl.secretName" . }}
+
+  # secretTemplate is optional. If set, these annotations and labels will be
+  # copied to the Secret named example-com-tls. These labels and annotations will
+  # be re-reconciled if the Certificate's secretTemplate changes. secretTemplate
+  # is also enforced, so relevant label and annotation changes on the Secret by a
+  # third party will be overwriten by cert-manager to match the secretTemplate.
+  secretTemplate:
+    {{- with .Values.certs.ssl.annotations }}
+    annotations:
+      {{- toYaml . | nindent 6 }}
+    {{- end }}
+    labels:
+      {{- include "kanidm.labels" . | nindent 6 }}
+
+  duration: {{ .Values.certs.ssl.duration }}
+  renewBefore: {{ .Values.certs.ssl.renewBefore }}
+  
+  {{- with .Values.certs.ssl.subject }}
+  subject:
+    {{- toYaml . | nindent 4}}
+  {{- end }}
+  commonName: {{ include "kanidm.ssl.commonName" . }}
+  {{- with (include "kanidm.ssl.dnsNames" .) }}
+  dnsNames:
+    {{- . | nindent 4 }}
+  {{- end }}
+
+  isCA: false
+
+  {{- with .Values.certs.ssl.privateKey }}
+  privateKey:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+
+  {{- with .Values.certs.ssl.issuerRef }}
+  issuerRef:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+{{- end }}

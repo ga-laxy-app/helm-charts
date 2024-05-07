@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "kanidm.fullname" . }}-web
+  labels:
+    {{- include "kanidm.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.kanidm.web.service.type }}
+  ports:
+    - port: {{ .Values.kanidm.web.service.port }}
+      targetPort: web
+      protocol: TCP
+      name: web
+  selector:
+    {{- include "kanidm.selectorLabels" . | nindent 4 }}
