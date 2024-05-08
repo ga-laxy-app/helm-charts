@@ -53,8 +53,7 @@ db_path = "/var/kanidm/data/kanidm.db"
 # db_arc_size = 2048
 #
 #   TLS chain and key in pem format. Both must be present
-tls_ca = "/var/kanidm/ssl/ca.pem"
-tls_cert = "/var/kanidm/ssl/cert.pem"
+tls_chain = "/var/kanidm/ssl/cert.pem"
 tls_key = "/var/kanidm/ssl/key.pem"
 #
 #   The log level of the server. May be one of info, debug, trace
