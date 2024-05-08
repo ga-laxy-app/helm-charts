@@ -3,6 +3,16 @@ entries:
   kanidm:
   - apiVersion: v2
     appVersion: 1.2.0
+    created: "2024-05-08T14:15:09.741643728Z"
+    description: A Helm chart for kanidm
+    digest: 7d01b592ddba8ffdc1e977efefe49c5ae6bd42b5b2b98dea378851b954e60d37
+    name: kanidm
+    type: application
+    urls:
+    - https://github.com/ga-laxy-app/helm-charts/releases/download/kanidm-0.1.1/kanidm-0.1.1.tgz
+    version: 0.1.1
+  - apiVersion: v2
+    appVersion: 1.2.0
     created: "2024-05-08T13:26:44.186622842Z"
     description: A Helm chart for kanidm
     digest: a09e7ab2e665fc1d3e99ac73613ccbba9debc46dfc103e7d15e2a97a7422e499
@@ -11,4 +21,4 @@ entries:
     urls:
     - https://github.com/ga-laxy-app/helm-charts/releases/download/kanidm-0.1.0/kanidm-0.1.0.tgz
     version: 0.1.0
-generated: "2024-05-08T13:26:44.186633101Z"
+generated: "2024-05-08T14:15:09.741654839Z"
