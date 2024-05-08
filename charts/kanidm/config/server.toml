@@ -14,6 +14,9 @@ ldapbindaddress = "[::]:3636"
 # ldapbindaddress = "[::]:3636"
 {{- end}}
 #
+#   TODO
+adminbindpath = "/var/kanidm/data/kanidmd.sock"
+#
 #   HTTPS requests can be reverse proxied by a loadbalancer.
 #   To preserve the original IP of the caller, these systems
 #   will often add a header such as "Forwarded" or

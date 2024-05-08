@@ -69,12 +69,12 @@ resources:
 
 livenessProbe:
   httpGet:
-    path: /
-    port: http
+    path: /status
+    port: web
 readinessProbe:
   httpGet:
-    path: /
-    port: http
+    path: /status
+    port: web
 
 autoscaling:
   enabled: false
