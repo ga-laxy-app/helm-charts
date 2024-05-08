@@ -71,10 +71,12 @@ livenessProbe:
   httpGet:
     path: /status
     port: web
+    scheme: HTTPS
 readinessProbe:
   httpGet:
     path: /status
     port: web
+    scheme: HTTPS
 
 autoscaling:
   enabled: false
