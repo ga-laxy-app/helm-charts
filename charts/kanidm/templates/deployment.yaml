@@ -70,7 +70,8 @@ spec:
           emptyDir: {}
         - name: ssl
           secret:
-            secretName: {{ include "kanidm.fullname" . }}-ssl
+            secretName: {{ include "kanidm.ssl.secretName" . }}
+            readOnly: true
       {{- with .Values.volumes }}
         {{- toYaml . | nindent 8 }}
       {{- end }}
