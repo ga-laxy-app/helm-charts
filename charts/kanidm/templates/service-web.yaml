@@ -4,6 +4,10 @@ metadata:
   name: {{ include "kanidm.fullname" . }}-web
   labels:
     {{- include "kanidm.labels" . | nindent 4 }}
+  {{- with .Values.kanidm.web.service.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
 spec:
   type: {{ .Values.kanidm.web.service.type }}
   ports:

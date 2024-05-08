@@ -173,6 +173,9 @@ kanidm:
     service:
       type: ClusterIP
       port: 443
+      annotations: {}
+        # traefik.ingress.kubernetes.io/service.serversscheme: https
+        # traefik.ingress.kubernetes.io/service.serverstransport: foobar@kubernetescrd
 
     # HTTPS requests can be reverse proxied by a loadbalancer.
     # To preserve the original IP of the caller, these systems
