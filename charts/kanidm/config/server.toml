@@ -87,7 +87,7 @@ domain = {{ .Values.kanidm.domain | quote }}
 #   domain name you configure above. If these two items are
 #   not consistent, the server WILL refuse to start!
 #   origin = "https://idm.example.com"
-origin = {{ .Values.kanidm.origin | default .Values.kanidm.domain | quote }}
+origin = {{ .Values.kanidm.origin | default (printf "https://%s" .Values.kanidm.domain) | quote }}
 {{- if .Values.kanidm.backup.enabled }}
 #
 [online_backup]
