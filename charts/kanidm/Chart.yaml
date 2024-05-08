@@ -1,6 +1,6 @@
 apiVersion: v2
 name: kanidm
-description: A Helm chart for "Kanidm - Simple and Secure Identity Management"
+description: A Helm chart for kanidm
 
 # A chart can be either an 'application' or a 'library' chart.
 #
