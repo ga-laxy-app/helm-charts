@@ -41,7 +41,7 @@ spec:
             - name: web
               containerPort: 8443
               protocol: TCP
-            {{- if .Values.kanidm.ldap.enabled }}
+            {{- if .Values.ldap.enabled }}
             - name: ldap
               containerPort: 3636
               protocol: TCP
@@ -53,25 +53,37 @@ spec:
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           volumeMounts:
-            - name: cfg
-              mountPath: "/etc/kanidm"
             - name: data
-              mountPath: "/var/kanidm/data"
-            - name: ssl
-              mountPath: "/var/kanidm/ssl"
+              mountPath: "/data"
+            - name: cfg
+              mountPath: "/data"
+              subPath: "server.toml"
+            - name: certs
+              mountPath: "/certs"
           {{- with .Values.volumeMounts }}
             {{- toYaml . | nindent 12 }}
           {{- end }}
       volumes:
-        - name: cfg
-          configMap:
-            name: {{ include "kanidm.fullname" . }}
-        - name: data
-          emptyDir: {}
-        - name: ssl
+        - name: certs
           secret:
             secretName: {{ include "kanidm.ssl.secretName" . }}
             readOnly: true
+        - name: config
+          configMap:
+            name: {{ include "kanidm.fullname" . }}
+            readOnly: true
+        - name: data
+          {{- if .Values.persistence.enabled }}
+          {{- if .Values.persistence.existingClaimName }}
+          persistentVolumeClaim:
+            claimName: {{ .Values.persistence.existingClaimName }}
+          {{- else }}
+          persistentVolumeClaim:
+            claimName: {{ include "kanidm.fullname" . }}
+          {{- end }}
+          {{- else }}
+          emptyDir: {}
+          {{- end }}
       {{- with .Values.volumes }}
         {{- toYaml . | nindent 8 }}
       {{- end }}

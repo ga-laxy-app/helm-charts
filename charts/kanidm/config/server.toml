@@ -8,14 +8,11 @@ bindaddress = "[::]:8443"
 #   TLS certificates. If set to 636 you may require
 #   the NET_BIND_SERVICE capability.
 #   Defaults to "" (disabled)
-{{- if .Values.kanidm.ldap.enabled }}
+{{- if .Values.ldap.enabled }}
 ldapbindaddress = "[::]:3636"
 {{- else }}
 # ldapbindaddress = "[::]:3636"
 {{- end}}
-#
-#   TODO
-adminbindpath = "/var/kanidm/data/kanidmd.sock"
 #
 #   HTTPS requests can be reverse proxied by a loadbalancer.
 #   To preserve the original IP of the caller, these systems
@@ -25,7 +22,7 @@ adminbindpath = "/var/kanidm/data/kanidmd.sock"
 #   connected client. If you are not using a load balancer
 #   then you should leave this value as default.
 #   Defaults to false
-{{- if .Values.kanidm.web.trustXForwardFor }}
+{{- if .Values.web.trustXForwardFor }}
 trust_x_forward_for = true
 {{- else }}
 # trust_x_forward_for = false
@@ -56,15 +53,15 @@ db_path = "/var/kanidm/data/kanidm.db"
 # db_arc_size = 2048
 #
 #   TLS chain and key in pem format. Both must be present
-tls_chain = "/var/kanidm/ssl/tls.crt"
-tls_key = "/var/kanidm/ssl/tls.key"
+tls_chain = "/certs/tls.crt"
+tls_key = "/certs/tls.key"
 #
 #   The log level of the server. May be one of info, debug, trace
 #
 #   NOTE: this can be overridden by the environment variable
 #   `KANIDM_LOG_LEVEL` at runtime
 #   Defaults to "info"
-log_level = {{ .Values.kanidm.logLevel | quote }}
+log_level = {{ .Values.logLevel | quote }}
 #
 #   The DNS domain name of the server. This is used in a
 #   number of security-critical contexts
@@ -82,7 +79,7 @@ log_level = {{ .Values.kanidm.logLevel | quote }}
 #   webauthn, oauth tokens, and more.
 #   If you change this value you *must* run
 #   `kanidmd domain_name_change` immediately after.
-domain = {{ .Values.kanidm.domain | quote }}
+domain = {{ .Values.domain | quote }}
 #
 #   The origin for webauthn. This is the url to the server,
 #   with the port included if it is non-standard (any port
@@ -90,15 +87,15 @@ domain = {{ .Values.kanidm.domain | quote }}
 #   domain name you configure above. If these two items are
 #   not consistent, the server WILL refuse to start!
 #   origin = "https://idm.example.com"
-origin = {{ .Values.kanidm.origin | default (printf "https://%s" .Values.kanidm.domain) | quote }}
-{{- if .Values.kanidm.backup.enabled }}
+origin = {{ .Values.origin | default (printf "https://%s" .Values.domain) | quote }}
+{{- if .Values.backup.enabled }}
 #
 [online_backup]
 #   The path to the output folder for online backups
-path = {{ .Values.kanidm.backup.path | quote }}
+path = {{ .Values.backup.path | quote }}
 #   The schedule to run online backups (see https://crontab.guru/)
 #   every day at 22:00 UTC (default)
-schedule = {{ .Values.kanidm.backup.schedule | quote }}
+schedule = {{ .Values.backup.schedule | quote }}
 #    four times a day at 3 minutes past the hour, every 6th hours
 # schedule = "03 */6 * * *"
 #   We also support non standard cron syntax, with the following format:
@@ -106,5 +103,5 @@ schedule = {{ .Values.kanidm.backup.schedule | quote }}
 #   (it's very similar to the standard cron syntax, it just allows to specify the seconds
 #   at the beginning and the year at the end)
 #   Number of backups to keep (default 7)
-versions = {{ .Values.kanidm.backup.versions }}
+versions = {{ .Values.backup.versions }}
 {{- end }}

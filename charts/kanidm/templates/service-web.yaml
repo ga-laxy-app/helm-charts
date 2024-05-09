@@ -4,14 +4,14 @@ metadata:
   name: {{ include "kanidm.fullname" . }}-web
   labels:
     {{- include "kanidm.labels" . | nindent 4 }}
-  {{- with .Values.kanidm.web.service.annotations }}
+  {{- with .Values.web.service.annotations }}
   annotations:
     {{- toYaml . | nindent 4 }}
   {{- end }}
 spec:
-  type: {{ .Values.kanidm.web.service.type }}
+  type: {{ .Values.web.service.type }}
   ports:
-    - port: {{ .Values.kanidm.web.service.port }}
+    - port: {{ .Values.web.service.port }}
       targetPort: web
       protocol: TCP
       name: web

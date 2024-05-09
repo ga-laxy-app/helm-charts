@@ -166,94 +166,99 @@ certs:
       name: ca
       kind: ClusterIssuer
       group: cert-manager.io
-  
 
-kanidm:
-  web:
-    service:
-      type: ClusterIP
-      port: 443
-      annotations: {}
-        # traefik.ingress.kubernetes.io/service.serversscheme: https
-        # traefik.ingress.kubernetes.io/service.serverstransport: foobar@kubernetescrd
+persistence:
+  enabled: false
+  storageClassName: ""  # Use "" for the default storage class
+  accessMode: ReadWriteMany
+  size: 10Gi
+  existingClaimName: ""
 
-    # HTTPS requests can be reverse proxied by a loadbalancer.
-    # To preserve the original IP of the caller, these systems
-    # will often add a header such as "Forwarded" or
-    # "X-Forwarded-For". If set to true, then this header is
-    # respected as the "authoritative" source of the IP of the
-    # connected client. If you are not using a load balancer
-    # then you should leave this value as default.
-    #
-    # Defaults to false
-    trustXForwardFor: false
-  
-  # The read-only ldap server bind address. Requires
-  # TLS certificates.
-  ldap:
-    enabled: false
-    service:
-      type: ClusterIP
-      port: 636
+web:
+  service:
+    type: ClusterIP
+    port: 443
+    annotations: {}
+      # traefik.ingress.kubernetes.io/service.serversscheme: https
+      # traefik.ingress.kubernetes.io/service.serverstransport: foobar@kubernetescrd
 
-  # The log level of the server. May be one of info, debug, trace
+  # HTTPS requests can be reverse proxied by a loadbalancer.
+  # To preserve the original IP of the caller, these systems
+  # will often add a header such as "Forwarded" or
+  # "X-Forwarded-For". If set to true, then this header is
+  # respected as the "authoritative" source of the IP of the
+  # connected client. If you are not using a load balancer
+  # then you should leave this value as default.
   #
-  # NOTE: this can be overridden by the environment variable
-  # `KANIDM_LOG_LEVEL` at runtime
-  #
-  # Defaults to "info"
-  logLevel: "debug"
+  # Defaults to false
+  trustXForwardFor: false
 
-  # The DNS domain name of the server. This is used in a
-  # number of security-critical contexts
-  # such as webauthn, so it *must* match your DNS
-  # hostname. It is used to create
-  # security principal names such as `william@idm.example.com`
-  # so that in a (future) trust configuration it is possible
-  # to have unique Security Principal Names (spns) throughout
-  # the topology.
-  #
-  # ⚠️  WARNING ⚠️
-  #
-  # Changing this value WILL break many types of registered
-  # credentials for accounts including but not limited to
-  # webauthn, oauth tokens, and more.
-  # If you change this value you *must* run
-  # `kanidmd domain_name_change` immediately after.
-  #
-  # Be sure to expose the service on this domain for example by
-  # enabling the ingress like this:
-  # ````yaml
-  # ingress:
-  #   enabled: false
-  #   className: ""
-  #   annotations: {}
-  #     # kubernetes.io/ingress.class: nginx
-  #     # kubernetes.io/tls-acme: "true"
-  #   hosts:
-  #     - host: idm.example.com
-  #       paths:
-  #         - path: /
-  #           pathType: ImplementationSpecific
-  #   tls: []
-  #   #  - secretName: kanidm-ingress-tls
-  #   #    hosts:
-  #   #      - idm.example.com
-  # ````
-  domain: "idm.example.com"
+# The read-only ldap server bind address. Requires
+# TLS certificates.
+ldap:
+  enabled: false
+  service:
+    type: ClusterIP
+    port: 636
 
-  # The origin for webauthn. This is the url to the server,
-  # with the port included if it is non-standard (any port
-  # except 443). This must match or be a descendent of the
-  # domain name you configure above. If these two items are
-  # not consistent, the server WILL refuse to start!
-  # origin: "https://idm.example.com"
-  #
-  # Defaults to the `domain`
-  origin: ""
+# The log level of the server. May be one of info, debug, trace
+#
+# NOTE: this can be overridden by the environment variable
+# `KANIDM_LOG_LEVEL` at runtime
+#
+# Defaults to "info"
+logLevel: "debug"
 
-  backup:
-    enabled: false
-    path: "/var/kanidm/backup"
-    schedule: "00 22 * * *"
-    versions: 7
+# The DNS domain name of the server. This is used in a
+# number of security-critical contexts
+# such as webauthn, so it *must* match your DNS
+# hostname. It is used to create
+# security principal names such as `william@idm.example.com`
+# so that in a (future) trust configuration it is possible
+# to have unique Security Principal Names (spns) throughout
+# the topology.
+#
+# ⚠️  WARNING ⚠️
+#
+# Changing this value WILL break many types of registered
+# credentials for accounts including but not limited to
+# webauthn, oauth tokens, and more.
+# If you change this value you *must* run
+# `kanidmd domain_name_change` immediately after.
+#
+# Be sure to expose the service on this domain for example by
+# enabling the ingress like this:
+# ````yaml
+# ingress:
+#   enabled: false
+#   className: ""
+#   annotations: {}
+#     # kubernetes.io/ingress.class: nginx
+#     # kubernetes.io/tls-acme: "true"
+#   hosts:
+#     - host: idm.example.com
+#       paths:
+#         - path: /
+#           pathType: ImplementationSpecific
+#   tls: []
+#   #  - secretName: kanidm-ingress-tls
+#   #    hosts:
+#   #      - idm.example.com
+# ````
+domain: "idm.example.com"
+
+# The origin for webauthn. This is the url to the server,
+# with the port included if it is non-standard (any port
+# except 443). This must match or be a descendent of the
+# domain name you configure above. If these two items are
+# not consistent, the server WILL refuse to start!
+# origin: "https://idm.example.com"
+#
+# Defaults to the `domain`
+origin: ""
+
+backup:
+  enabled: false
+  path: "/var/kanidm/backup"
+  schedule: "00 22 * * *"
+  versions: 7
